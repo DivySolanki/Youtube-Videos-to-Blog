@@ -1,8 +1,12 @@
 from crewai import Agent
 from tools import yt_tool
+from langchain_ollama import ChatOllama
+
+llm = ChatOllama(
+    model = "llama3.1",
+    base_url = "http://localhost:11434")
 
 ## Create a senior blog content researcher
-
 blog_researcher = Agent(
     role="Blog Researcher from YouTube Videos",
     goal="get the relevant video content for the topic {topic} from Yt channel",
@@ -12,11 +16,11 @@ blog_researcher = Agent(
         "Expert in understanding videos in Computer Science discipline particularly specialized in Data Structures and Algorithms, also it provides suggestions"
     ),
     tools=[yt_tool],
-    allow_delegation=True
+    allow_delegation=True,
+    llm=llm
 )
 
 ## Creating a senior blog writer agent with YT tool
-
 blog_writer = Agent(
     role="Writer",
     goal="Narrate a compelling tech stories about the video {topic} from Yt channel",
@@ -26,6 +30,7 @@ blog_writer = Agent(
         "With a flair for simplifying complex topics, you craft engaging narratives that capture and educate, bringing new discoveries to the lime light in an accessible manner."
     ),
     tools=[yt_tool],
-    allow_delegation=False
+    allow_delegation=False,
+    llm=llm
 )
 
